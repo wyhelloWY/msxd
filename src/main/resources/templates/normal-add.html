@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>新建问题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="lib/layui-v2.5.5/css/layui.css" media="all" th:href="@{/layuistate/lib/layui-v2.5.5/css/layui.css}">
+    <link rel="stylesheet" href="../css/public.css" th:href="@{/layuistate/css/public.css}" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">常规问题</label>
+        <div class="layui-input-block">
+            <textarea  class="layui-textarea" id="quest_content" name="quest_content" ></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">常规回答</label>
+        <div class="layui-input-block">
+            <textarea  class="layui-textarea" id="answer_content" name="answer_content" ></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">编辑</button>
+        </div>
+    </div>
+</div>
+<script src="lib/layui-v2.5.5/layui.js" th:src="@{/layuistate/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+
+            $ = layui.$;
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            if($('#quest_content').val()!=null&&$('#quest_content').val()!=""
+                &&$('#answer_content').val()!=null &&$('#answer_content').val()!=""){
+                $.ajax({
+                    url: '/msxd/questAndAnswer/addNoraml',
+                    type: "POST",
+                    data:{
+                        id:$('#id').val(),
+                        quest_content:$('#quest_content').val(),
+                        answer_content:$('#answer_content').val(),
+                    },
+                    success:function () {
+                        layer.msg("新建成功");
+                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                        window.parent.location.reload();
+                    }
+                });
+
+
+            }else{
+                layer.msg("请先填充数据再进行提交");
+            }
+
+
+
+
+        });
+
+    });
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#backup_date'
+            ,type: 'datetime'
+
+        });
+
+    })
+
+</script>
+</body>
+</html>

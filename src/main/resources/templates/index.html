@@ -1,0 +1,179 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" th:href="@{/layuistate/login/css/bootstrap.min.css}">
+<link href="css/font-awesome.min.css" type="text/javascript" rel="stylesheet" th:href="@{/layuistate/login/css/font-awesome.min.css}">
+<link href="css/bootsnav.css" type="text/css" rel="stylesheet" th:href="@{/layuistate/login/css/bootsnav.css}">
+<link href="css/normalize.css" type="text/css" rel="stylesheet" th:href="@{/layuistate/login/css/normalize.css}">
+<link href="css/css.css" rel="stylesheet" type="text/css" th:href="@{/layuistate/login/css/css.css}">
+<script src="js/jquery-1.11.0.min.js" type="text/javascript" th:src="@{/layuistate/login/js/jquery-1.11.0.min.js}"></script>
+<script src="js/bootstrap.min.js" type="text/javascript" th:src="@{/layuistate/login/js/bootstrap.min.js}"></script>
+<script src="js/bootsnav.js" type="text/javascript" th:src="@{/layuistate/login/js/bootsnav.js}"></script>
+<!-- <script src="js/jquery.js" type="text/javascript"></script> -->
+<title>江西农业大学软件学院</title>
+</head>
+
+<body class="logobg_style" onLoad="document.getElementById('user_name').focus();GetCookie();">
+  	<div id="large-header" class="large-header login-page">
+  		<canvas id="demo-canvas" width="1590" height="711"></canvas>
+		<div class="logo-xkkj">
+			<p>江&nbsp;西&nbsp;农&nbsp;业&nbsp;大&nbsp;学&nbsp;软&nbsp;件&nbsp;学&nbsp;院 </p>
+			<p style="font-size: 10px;">Jiangxi Agricultural University Software College</p>
+		</div>
+		<div class="login-header">
+			<span >登录</span>
+		</div>
+  		<div class="login-form">
+  			<div class="login-content">
+  				<h1 class="title_name">登录</h1>
+  				<form method="post" role="form" id="form_login" class="login_padding">
+				<div class="form-group clearfix">
+
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="icon_user"></i>
+						</div>
+
+						<input type="text" class="form-control" name="user_name" id="user_name" placeholder="请输入用户名" autocomplete="off">
+					</div>
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="icon_password"></i>
+						</div>
+
+						<input type="password" class="form-control" name="user_pass" id="user_pass" placeholder="请输入密码" autocomplete="off">
+					</div>
+
+				</div>
+					<div class=" textright"><input type="checkbox" id="remember_password"/><a href="forget.html" class="forget">记住密码</a></div>
+                  <div class="tishi"></div>
+				<div class="form-group">
+					<a href="javascript:;" type="submit"  class="btn btn-primary btn-block btn-login" onclick="checkInCorrect()">
+						<i class="fa fa-sign-in"></i>
+						登录
+					</a>
+				</div>
+			</form>
+  			</div>
+  			
+  		</div>
+  	</div>
+<script src="js/TweenLite/TweenLite.min.js" th:src="@{/layuistate/login/js/TweenLite/TweenLite.min.js}"></script>
+<script src="js/TweenLite/EasePack.min.js" th:src="@{/layuistate/login/js/TweenLite/EasePack.min.js}"></script>
+<script src="js/TweenLite/rAF.js" th:src="@{/layuistate/login/js/TweenLite/rAF.js}"></script>
+<script src="js/TweenLite/demo-1.js" th:src="@{/layuistate/login/js/TweenLite/demo-1.js}"></script>
+</body>
+<script>
+	function cliLogin(){
+		$.ajax({
+			//请求方式
+			type : "POST",
+			//请求的媒体类型
+			// contentType: "application/json;charset=UTF-8",
+			//请求地址
+			url : "/msxd/user/login",
+			//数据，json字符串
+			data : $("#form_login").serialize(),
+			dataType:"json",
+			//请求成功
+			success : function(data) {
+                saveInfo();
+				console.log(data.result);
+				if (data.result=="success")
+				{
+
+					alert("登录成功");
+					// window.location.href = "/msxd/page/center";
+					window.location.href = "/msxd/page/center";
+				}else {
+					alert("登录失败,账户名或者密码错误");
+				}
+			},
+			//请求失败，包含具体的错误信息
+			error : function(e){
+				console.log(e.status);
+				console.log(e.responseText);
+			}
+		});
+
+	}
+    function checkInCorrect()      //判断用户名和密码是否为空
+    {
+        if (document.getElementById('user_name').value == "") {
+            alert('请输入用户名！')
+            document.getElementById('user_name').focus();
+            return false
+        }
+        if (document.getElementById('user_pass').value == "") {
+            alert('请输入密码！')
+            document.getElementById('user_pass').focus();
+            return false
+        }
+        else {
+            saveInfo();
+            cliLogin();
+
+            return true;
+        }
+    }
+
+    saveInfo = function () {
+        try {
+            var isSave = document.getElementById('remember_password').checked;   //保存按键是否选中
+            if (isSave) {
+                var user_name = document.getElementById('user_name').value;
+                var user_pass = document.getElementById('user_pass').value;
+                if (user_name != "" && user_pass != "") {
+                    SetCookie(user_name, user_pass);
+                }
+            } else {
+                SetCookie("", "");
+            }
+        } catch (e) {
+
+        }
+    }
+
+    function SetCookie(username, password) {
+        var Then = new Date();
+        Then.setTime(Then.getTime() + 1866240000000);
+        document.cookie = "user_name=" + username + "%%" + password + ";expires=" + Then.toGMTString();
+    }
+
+    function GetCookie() {
+        var nmpsd;
+        var nm;
+        var psd;
+        var cookieString = new String(document.cookie);
+        var cookieHeader = "user_name=";
+        var beginPosition = cookieString.indexOf(cookieHeader);
+        cookieString = cookieString.substring(beginPosition);
+        var ends = cookieString.indexOf(";");
+        if (ends != -1) {
+            cookieString = cookieString.substring(0, ends);
+        }
+        if (beginPosition > -1) {
+            nmpsd = cookieString.substring(cookieHeader.length);
+            if (nmpsd != "") {
+                beginPosition = nmpsd.indexOf("%%");
+                nm = nmpsd.substring(0, beginPosition);
+                psd = nmpsd.substring(beginPosition + 2);
+                document.getElementById('user_name').value = nm;
+                document.getElementById('user_pass').value = psd;
+                if (nm != "" && psd != "") {
+                    // document.forms[0].checkbox.checked = true;
+                    document.getElementById('remember_password').checked = true;
+                }
+            }
+        }
+    }
+</script>
+</html>

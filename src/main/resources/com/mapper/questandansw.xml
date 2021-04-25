@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landian.mashangxiadan.mapper.QuestAndAnswerMapper">
+    <resultMap id="BaseResultMap" type="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo" >
+        <result column="id" property="id" />
+        <result column="quest_id" property="quest_id" />
+        <result column="quest_content" property="quest_content" />
+        <result column="quest_date" property="quest_date" />
+        <result column="answer_id" property="answer_id" />
+        <result column="answer_content" property="answer_content" />
+        <result column="answer_date" property="answer_date" />
+        <result column="quest_statue" property="quest_statue" />
+    </resultMap>
+
+    <delete id="deleteQuest">
+            delete from ld_ques_answ where id = #{id}
+    </delete>
+    <sql id="Base_Column_List">
+                id,
+                quest_id,
+                quest_content,
+                quest_date,
+                answer_id,
+                answer_content,
+                answer_date,
+                quest_statue
+    </sql>
+    <select id="listAll" resultType="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo">
+        SELECT * FROM ld_ques_answ order By quest_date desc
+    </select>
+
+    <select id="listByAnswerNull" resultType="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo">
+        SELECT * FROM ld_ques_answ WHERE answer_id IS NULL;
+    </select>
+
+    <select id="listByQuest" resultType="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo">
+        SELECT * FROM ld_ques_answ WHERE quest_id = #{quest_id};
+    </select>
+
+    <select id="listByAnswer" resultType="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo">
+        SELECT * FROM ld_ques_answ WHERE answer_id = #{answer_id};
+    </select>
+    <select id="selectOne" resultType="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo">
+        SELECT * FROM ld_ques_answ WHERE id = #{id};
+    </select>
+
+    <select id="listBykeyWord" resultType="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo" parameterType="String">
+        SELECT * FROM ld_ques_answ WHERE quest_content LIKE concat('%',#{key},'%') OR answer_content LIKE concat('%',#{key},'%')
+    </select>
+
+    <insert id="insertQuest">
+        insert into ld_ques_answ(
+        quest_id,
+        quest_content,
+        quest_date
+        )
+        values(
+        #{quest_id},
+        #{quest_content},
+        #{quest_date}
+        )
+    </insert>
+
+    <update id="updateStatue">
+        update ld_ques_answ set quest_statue = #{quest_statue} where id = #{id}
+    </update>
+
+    <update id="insertAnswer">
+        update ld_ques_answ set answer_id = #{answer_id},answer_content = #{answer_content}, answer_date = #{answer_date},quest_statue = 1 where id = #{id}
+    </update>
+
+    <select id="selectQuestStatue" resultType="com.landian.mashangxiadan.pojo.QuestAndAnswerInfo">
+        select * from ld_ques_answ where quest_id =#{quest_id} and quest_statue = 1
+    </select>
+    <update id="updateAnswerId">
+        update ld_ques_answ set answer_id = #{answer_id} ,quest_statue = 6 where id = #{id}
+    </update>
+
+   <select id="selectOneQuestStatue" resultType="int">
+        select quest_statue from ld_ques_answ where id = #{id}
+    </select>
+    <select id="selectPage"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ld_ques_answ
+    </select>
+
+</mapper>

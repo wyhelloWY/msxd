@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landian.mashangxiadan.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.landian.mashangxiadan.pojo.UserInfo" >
+        <result column="id" property="id" />
+        <result column="user_id" property="user_id" />
+        <result column="user_name" property="user_name" />
+        <result column="user_pass" property="user_pass" />
+        <result column="user_sex" property="user_sex" />
+        <result column="user_academy" property="user_academy" />
+        <result column="user_devote" property="user_devote" />
+        <result column="user_type" property="user_type" />
+        <result column="user_login" property="user_login" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                user_id,
+                user_name,
+                user_pass,
+                user_sex,
+                user_academy,
+                user_devote,
+                user_type,
+                user_login
+    </sql>
+    <select id="listAll" resultType="com.landian.mashangxiadan.pojo.UserInfo">
+        select * from ld_user
+    </select>
+
+    <select id="selectToPass" resultType="String">
+        select user_pass from ld_user where user_id = #{user_id};
+
+    </select>
+
+    <select id="selectById" resultType="com.landian.mashangxiadan.pojo.UserInfo">
+        select * from ld_user where user_id = #{user_id};
+    </select>
+    <select id="selectUserById" resultType="com.landian.mashangxiadan.pojo.UserInfo">
+        select * from ld_user where id = #{id};
+    </select>
+
+    <select id="selectDevoteById">
+        select user_devote from ld_user where user_id = #{user_id};
+    </select>
+
+    <select id="selectUserName" resultType="String">
+        select user_name from ld_user where user_id = #{user_id};
+    </select>
+    <select id="selectUserType">
+        select user_type from ld_user where user_id = #{user_id};
+    </select>
+    <insert id="insertUser" parameterType="com.landian.mashangxiadan.pojo.UserInfo">
+        insert into ld_user
+        (
+        user_id,
+        user_name,
+        user_pass,
+        user_sex,
+        user_academy,
+        user_devote,
+        user_type,
+        user_login
+        )
+        values
+        (
+        #{user_id},
+        #{user_name},
+        #{user_pass},
+        #{user_sex},
+        #{user_academy},
+        #{user_devote},
+        #{user_type},
+        #{user_login}
+        )
+    </insert>
+    <update id="updateManageUser" parameterType="com.landian.mashangxiadan.pojo.UserInfo">
+        UPDATE ld_user
+        <set>
+            <if test ='null != user_id'>user_id = #{user_id},</if>
+            <if test ='null != user_name'>user_name = #{user_name},</if>
+            <if test ='null != user_pass'>user_pass = #{user_pass},</if>
+            <if test ='null != user_academy'>user_academy = #{user_academy},</if>
+            <if test ='null != user_devote'>user_devote = #{user_devote},</if>
+            <if test ='null != user_type'>user_type = #{user_type}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="updateUserType">
+        update ld_user set user_type = #{user_type} where user_id = #{user_id}
+    </update>
+
+    <update id="updateUserPass">
+        update ld_user set user_pass = #{user_pass} where user_id = #{user_id}
+    </update>
+
+    <delete id="deleteUser">
+        delete from ld_user where id = #{id}
+    </delete>
+
+    <update id="updateUserDevote">
+        update ld_user set user_devote = user_devote+1 where user_id = #{user_id}
+    </update>
+
+
+    <update id="updateUserLoginTime">
+        update ld_user set user_login = #{user_login} where user_id = #{user_id}
+    </update>
+
+    <insert id="insertUserAll" parameterType="com.landian.mashangxiadan.pojo.UserInfo">
+        insert into ld_user
+        (user_id,
+        user_name,
+        user_pass,
+        user_sex,
+        user_academy,
+        user_devote,
+        user_type)
+        values
+        (#{user_id},
+        #{user_name},
+        #{user_pass},
+        #{user_sex},
+        #{user_academy},
+        #{user_devote},
+        #{user_type})
+    </insert>
+
+    <select id="selectPage"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ld_user
+    </select>
+
+    <select id="listBykeyWord" resultType="com.landian.mashangxiadan.pojo.UserInfo" parameterType="String">
+        SELECT * FROM ld_user WHERE user_name LIKE concat('%',#{key},'%')
+    </select>
+
+
+</mapper>

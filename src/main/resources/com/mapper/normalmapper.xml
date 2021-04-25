@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landian.mashangxiadan.mapper.NormalQuestionMapper">
+    <resultMap id="BaseResultMap" type="com.landian.mashangxiadan.pojo.NormalQuestionInfo" >
+        <result column="id" property="id" />
+        <result column="quest_id" property="quest_id" />
+        <result column="quest_content" property="quest_content" />
+        <result column="quest_date" property="quest_date" />
+        <result column="answer_id" property="answer_id" />
+        <result column="answer_content" property="answer_content" />
+        <result column="answer_date" property="answer_date" />
+        <result column="quest_statue" property="quest_statue" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                quest_id,
+                quest_content,
+                quest_date,
+                answer_id,
+                answer_content,
+                answer_date,
+                quest_statue
+    </sql>
+    <select id="listAll" resultType="com.landian.mashangxiadan.pojo.NormalQuestionInfo">
+        SELECT * FROM ld_normal_question order By quest_date desc
+    </select>
+
+    <select id="selectOne" resultType="com.landian.mashangxiadan.pojo.NormalQuestionInfo">
+        SELECT * FROM ld_normal_question WHERE id = #{id};
+    </select>
+
+    <select id="listBykeyWord" resultType="com.landian.mashangxiadan.pojo.NormalQuestionInfo" parameterType="String">
+        SELECT * FROM ld_normal_question WHERE quest_content LIKE concat('%',#{key},'%') OR answer_content LIKE concat('%',#{key},'%')
+    </select>
+
+    <insert id="insertNormal"  parameterType="com.landian.mashangxiadan.pojo.NormalQuestionInfo">
+        INSERT INTO ld_normal_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != quest_id'>
+                quest_id,
+            </if>
+            <if test ='null != quest_content'>
+                quest_content,
+            </if>
+            <if test ='null != quest_date'>
+                quest_date,
+            </if>
+            <if test ='null != answer_id'>
+                answer_id,
+            </if>
+            <if test ='null != answer_content'>
+                answer_content,
+            </if>
+            <if test ='null != answer_date'>
+                answer_date,
+            </if>
+            <if test ='null != quest_statue'>
+                quest_statue
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != quest_id'>
+                #{quest_id},
+            </if>
+            <if test ='null != quest_content'>
+                #{quest_content},
+            </if>
+            <if test ='null != quest_date'>
+                #{quest_date},
+            </if>
+            <if test ='null != answer_id'>
+                #{answer_id},
+            </if>
+            <if test ='null != answer_content'>
+                #{answer_content},
+            </if>
+            <if test ='null != answer_date'>
+                #{answer_date},
+            </if>
+            <if test ='null != quest_statue'>
+                #{quest_statue}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectPage"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ld_normal_question
+    </select>
+
+    <update id="updateNormal" parameterType="com.landian.mashangxiadan.pojo.NormalQuestionInfo">
+        UPDATE ld_normal_question
+        <set>
+            <if test ='null != quest_content'>quest_content = #{quest_content},</if>
+            <if test ='null != answer_content'>answer_content = #{answer_content}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteNormal">
+            delete from ld_normal_question where id = #{id}
+    </delete>
+</mapper>

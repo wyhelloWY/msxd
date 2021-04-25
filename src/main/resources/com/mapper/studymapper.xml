@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landian.mashangxiadan.mapper.StudyQuestMapper">
+    <select id="listAll" resultType="com.landian.mashangxiadan.pojo.StudyQuestInfo">
+        SELECT * FROM ld_study_answ order By study_date desc
+    </select>
+
+    <select id="listByAnswerNull" resultType="com.landian.mashangxiadan.pojo.StudyQuestInfo">
+        SELECT * FROM ld_study_answ WHERE study_answer_id IS NULL ;
+    </select>
+
+    <select id="listByQuest" resultType="com.landian.mashangxiadan.pojo.StudyQuestInfo">
+        SELECT * FROM ld_study_answ WHERE study_id = #{study_id};
+    </select>
+
+    <select id="listByAnswer" resultType="com.landian.mashangxiadan.pojo.StudyQuestInfo">
+        SELECT * FROM ld_study_answ WHERE study_answer_id = #{study_answer_id};
+    </select>
+    <select id="selectOne" resultType="com.landian.mashangxiadan.pojo.StudyQuestInfo">
+        SELECT * FROM ld_study_answ WHERE id = #{id};
+    </select>
+
+    <select id="listBykeyWord" resultType="com.landian.mashangxiadan.pojo.StudyQuestInfo" parameterType="String">
+        SELECT * FROM ld_study_answ WHERE study_content LIKE concat('%',#{key},'%') OR study_answer_content LIKE concat('%',#{key},'%')
+    </select>
+
+    <insert id="insertQuest">
+        insert into ld_study_answ(
+        study_id,
+        study_content,
+        study_date
+        )
+        values(
+        #{study_id},
+        #{study_content},
+        #{study_date}
+        )
+    </insert>
+
+    <update id="updateStatue">
+        update ld_study_answ set study_quest_statue = #{study_quest_statue} where id = #{id}
+    </update>
+
+    <update id="insertAnswer">
+        update ld_study_answ set study_answer_id = #{study_answer_id},study_answer_content = #{study_answer_content}, study_answer_date = #{study_answer_date},study_quest_statue = 1 where id = #{id}
+    </update>
+</mapper>

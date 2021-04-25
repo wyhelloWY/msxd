@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landian.mashangxiadan.mapper.ComplainMapper">
+    <select id="listAll" resultType="com.landian.mashangxiadan.pojo.ComplainInfo">
+    select * from ld_complain
+    </select>
+    <select id="listById" resultType="com.landian.mashangxiadan.pojo.ComplainInfo">
+    select * from ld_complain where user_id =#{user_id}
+    </select>
+
+    <insert id="insertComplain">
+    insert into ld_complain(
+    user_id,
+    complain_content,
+    complain_answer_id,
+    complain_date
+    )
+    values
+    (
+    #{user_id},
+    #{complain_content},
+    #{complain_answer_id},
+    #{complain_date}
+    )
+    </insert>
+
+</mapper>

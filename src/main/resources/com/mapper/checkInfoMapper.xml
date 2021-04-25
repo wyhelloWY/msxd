@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landian.mashangxiadan.mapper.CheckMapper">
+    <resultMap id="BaseResultMap" type="com.landian.mashangxiadan.pojo.CheckInfo" >
+        <result column="user_id" property="user_id" />
+        <result column="effective_nums" property="effective_nums" />
+        <result column="everyday_nums" property="everyday_nums" />
+        <result column="total_effect_nums" property="total_effect_nums" />
+        <result column="total_nums" property="total_nums" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                user_id,
+                effective_nums,
+                everyday_nums,
+                total_effect_nums,
+                total_nums
+    </sql>
+    <select id="listAll">
+
+        SELECT * FROM ld_check
+    </select>
+    <select id="selectAllDay" resultType="com.landian.mashangxiadan.pojo.CheckInfo">
+        SELECT * FROM ld_check  ORDER BY effective_nums DESC
+    </select>
+
+    <select id="selectAllTotal" resultType="com.landian.mashangxiadan.pojo.CheckInfo">
+        SELECT * FROM ld_check  ORDER BY total_effect_nums DESC
+    </select>
+
+    <select id="selectOneCheck" resultType="com.landian.mashangxiadan.pojo.CheckInfo">
+        select * from ld_check where user_id = #{user_id}
+    </select>
+
+    <select id="selectByUserID" resultType="int">
+        select count(*) from ld_check where user_id = #{user_id}
+    </select>
+    <insert id="insertCheckInfo">
+        insert into ld_check(
+        user_id,
+        effective_nums,
+        everyday_nums,
+        total_effect_nums,
+        total_nums
+        )
+        values(
+        #{user_id},
+        #{effective_nums},
+        #{everyday_nums},
+        #{total_effect_nums},
+        #{total_nums}
+        )
+    </insert>
+
+    <update id="updateCheckInfo">
+        update ld_check set effective_nums = #{effective_nums},
+        everyday_nums = #{everyday_nums},
+        total_effect_nums = #{total_effect_nums},
+        total_nums = #{total_nums} where user_id = #{user_id}
+    </update>
+
+    <update id="updateAllDay">
+        UPDATE ld_check SET effective_nums = 0
+    </update>
+
+    <update id="updateEveryNumbers">
+        update ld_check set effective_nums = effective_nums+1,
+        everyday_nums = everyday_nums+1,
+        total_effect_nums = total_effect_nums+1,
+        total_nums = total_nums+1 where user_id = #{user_id}
+    </update>
+
+    <select id="selectPage"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ld_check
+        ORDER BY total_effect_nums DESC
+    </select>
+
+
+    <select id="selectDayPage"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ld_check
+        ORDER BY effective_nums DESC
+    </select>
+
+</mapper>
